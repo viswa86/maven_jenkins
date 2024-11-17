@@ -17,6 +17,7 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ubuntu@52.66.64.59 << EOF
                         cd /home/ubuntu/project/maven_jenkins
                         git checkout staging
+                        git pull origin staging
                         git status
                         EOF
                         '''
