@@ -19,7 +19,7 @@ pipeline {
                         git checkout staging
                         git add *
                         git commit -m "Updated version"
-                        git pull origin staging
+                        git pull
                         git status
                         EOF
                         '''
