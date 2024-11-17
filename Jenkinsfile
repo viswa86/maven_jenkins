@@ -14,8 +14,11 @@ pipeline {
                     script {
                         // Run commands on the remote server
                         sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@52.66.64.59 << EOF
+                        ssh -o StrictHostKeyChecking=no ubuntu@52.66.64.59 <<EOF
+                        set -e  # Stop execution if any command fails
                         cd /home/ubuntu/project/maven_jenkins
+                        git fetch origin staging
+                        git reset --hard origin/staging
                         git checkout staging
                         git status
                         EOF
