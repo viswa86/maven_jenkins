@@ -53,7 +53,9 @@ git checkout staging
 git status
 EOF
                 '''             
-            }
+             }
         }
     }
+  }
 }
+        
