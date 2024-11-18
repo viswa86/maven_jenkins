@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         // Replace 'SONARCLOUD_TOKEN' with the credential ID
-        SONAR_TOKEN = credentials('31dbb0d9479abbaba6a1629b1f2a81a09e00ae0b')
+        SONAR_TOKEN = credentials('SONARCUBE_TOKEN')
     }
     stages {
         stage('Checkout Code') {
