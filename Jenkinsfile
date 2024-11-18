@@ -1,10 +1,40 @@
 pipeline {
     agent any
+    environment {
+        // Replace 'SONARCLOUD_TOKEN' with the credential ID
+        SONAR_TOKEN = credentials('31dbb0d9479abbaba6a1629b1f2a81a09e00ae0b')
+    }
     stages {
         stage('Checkout Code') {
             steps {
-                // Checkout the repository using SCM
                 checkout scm
+            }
+        }
+        stage('SonarCloud Analysis') {
+            steps {
+                withSonarQubeEnv('SonarCloud') {
+                    sh '''
+                    mvn clean verify sonar:sonar \
+                      -Dsonar.projectKey=viswa86 \
+                      -Dsonar.organization=viswa86 \
+                      -Dsonar.host.url=https://sonarcloud.io \
+                      -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 2, unit: 'MINUTES') {
+                        def qualityGate = waitForQualityGate()
+                        if (qualityGate.status != 'OK') {
+                            echo "WARNING: Quality Gate failed. Status: ${qualityGate.status}"
+                        } else {
+                            echo "Quality Gate passed successfully."
+                        }
+                    }
+                }
             }
         }
         stage('Deploy Code') {
@@ -22,9 +52,7 @@ git reset --hard origin/staging
 git checkout staging
 git status
 EOF
-                '''
-                    }
-                }
+                '''             
             }
         }
     }
